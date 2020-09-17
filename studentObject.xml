@@ -1,0 +1,7 @@
+<student>
+    <id>100</id>
+    <firstName>John</firstName>
+    <lastName>Smith</lastName>
+    <classType>online</classType>
+    <placed>not yet</placed>
+</student>
