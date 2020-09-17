@@ -1,4 +1,4 @@
-//import jdk.nashorn.internal.parser.JSONParser;  <- MAKE SURE NOT TO GET THIS IMPORT
+package workingWithJson;//import jdk.nashorn.internal.parser.JSONParser;  <- MAKE SURE NOT TO GET THIS IMPORT
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -13,7 +13,7 @@ public class a03_JsonFile {
         JSONArray jsonArray = readArrayFromJsonFile("results", "arrayJsonObject.json");
         for (Object jsonObject: jsonArray){
             JSONObject object = (JSONObject)jsonObject;
-            System.out.println(object.get("name"));
+            System.out.println(object.get("name") + " | open now: " + ((JSONObject)object.get("plus_code")).get("global_code"));
         }
     }
 
