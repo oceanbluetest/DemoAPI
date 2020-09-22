@@ -1,5 +1,6 @@
-package workingWithJson;//import jdk.nashorn.internal.parser.JSONParser;  <- MAKE SURE NOT TO GET THIS IMPORT
+package workingWithJson;
 
+//import jdk.nashorn.internal.parser.JSONParser;  <- MAKE SURE NOT TO GET THIS IMPORT
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,5 +42,18 @@ public class a03_JsonFile {
             e.printStackTrace();
         }
         return array;
+    }
+
+    public static String readBodyFromJsonFile(String fileName){
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+        try{
+            Object object = parser.parse(new FileReader(fileName));
+            jsonObject = (JSONObject)object;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 }

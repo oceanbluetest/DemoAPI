@@ -1,4 +1,4 @@
-package tests;
+package tests01;
 
 import io.restassured.http.ContentType;
 import org.json.simple.JSONObject;

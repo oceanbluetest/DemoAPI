@@ -1,8 +1,6 @@
-package tests;
+package tests01;
 
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.hamcrest.MatcherAssert;
 import org.json.simple.JSONObject;
 import org.testng.annotations.Test;
 
