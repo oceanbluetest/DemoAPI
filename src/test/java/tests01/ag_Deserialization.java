@@ -1,64 +1,57 @@
 package tests01;
 
 import org.testng.annotations.Test;
-import tests01.pojo.dummyAPI.Employee;
-import tests01.pojo.gorest.User;
-import tests01.pojo.jsonplaceholder.Comments;
-import tests01.pojo.jsonplaceholder.Post;
-import tests01.pojo.sdetCourse.Sdetcourse;
 
-import static io.restassured.RestAssured.*;
+import java.util.List;
+import java.util.Map;
+
+import static io.restassured.RestAssured.given;
 
 public class ag_Deserialization {
-    //BASIC ----------------------
-    @Test(description = "Basic deserialization, using one POJO")
+
+    //STORING SOME VALUES OF A RESPONSE IN A VARIABLE - aka PARSE JSON RESPONSE
+    @Test(description = "Using Extract method")
     void test01(){
-        Post post = given().get("https://jsonplaceholder.typicode.com/posts/1").as(Post.class);
-
-        System.out.println(post.getUserId());
-        System.out.println(post.getId());
-        System.out.println(post.getTitle());
-        System.out.println(post.getBody());
-    }
-
-    @Test(description = "CLASS TASK - Basic deserialization")
-    void test011(){
-        Comments comments = given().get("https://jsonplaceholder.typicode.com/comments/1").as(Comments.class);
-
-        System.out.println(comments.getPostId());
-        System.out.println(comments.getId());
-        System.out.println(comments.getName());
-        System.out.println(comments.getEmail());
-        System.out.println(comments.getBody());
-    }
-
-    //BASIC-COMPLEX ------------------------
-
-    @Test(description = "Basic-Complex - Deserialization, Need to create 2 POJOS: Employee.class and EmployeeData.class")
-    void test02(){
-        Employee employee = given().get("http://dummy.restapiexample.com/api/v1/employee/1").as(Employee.class);
-        System.out.println(employee.toString());
+        String name = given()
+                .get("https://jsonplaceholder.typicode.com/users/1")
+                .then()
+                .statusCode(200)
+                .log().body()
+                .extract()
+                .path("name");
+        System.out.println("------------- " + name);
     }
 
     @Test(description = "CLASS TASK")
+    void test011(){
+
+    }
+
+    //-------------------------------------------------------------
+
+    @Test(description = "using JSON Path")
+    void test02(){
+        String companyName = given().get("https://jsonplaceholder.typicode.com/users/1").jsonPath().getString("company.name");
+        System.out.println(companyName);
+    }
+
+    @Test(description = "get one property from list of properties")
     void test021(){
-        User user = given().get("https://gorest.co.in/public-api/users/14").as(User.class);
-        System.out.println(user.toString());
+        String companyName = given().get("https://jsonplaceholder.typicode.com/users").jsonPath().getString("company.name[1]");
+        System.out.println(companyName);
     }
 
-    //MORE-COMPLEX ----------------------
-    @Test(description = "more-complex deserialization, Need to create 2 POJOS: Sdetcourse.class and Course.class")
-    void test03(){
-        Sdetcourse sdetcourse = given()
-                .queryParam("name", "Selenium course")
-                .get("https://tla-school-api.herokuapp.com/api/school/programs/sdetcourse")
-                .as(Sdetcourse.class);
-
-        System.out.println(sdetcourse.getData().get(0).get_id());
-        System.out.println(sdetcourse.getData().get(0).getDuration());
-        System.out.println(sdetcourse.getData().get(0).getId());
-        System.out.println(sdetcourse.getData().get(0).getName());
-        System.out.println(sdetcourse.getData().get(0).get__v());
+    @Test(description = "CLASS TASK - print out all user names")
+    void test022(){
+        List<String> companyName = given().get("https://jsonplaceholder.typicode.com/users").jsonPath().getList("company.name");
+        companyName.forEach(a -> System.out.println(a));
     }
+
+    @Test(description = "objects inside the Json objects can be stored in a map")
+    void test023(){
+        Map<String, String> address = given().get("https://jsonplaceholder.typicode.com/users/1").jsonPath().getMap("address");
+        System.out.println(address.get("suite"));
+    }
+
 
 }

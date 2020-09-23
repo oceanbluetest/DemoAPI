@@ -1,9 +1,12 @@
 package tests01;
 
 import io.restassured.RestAssured;
+import io.restassured.http.Cookie;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -17,7 +20,8 @@ public class aa_GET_01 {
         response.getBody().prettyPrint();
     }
 
-    @Test(description = "CLASS TASK") //<<=========================
+    //Class task
+    @Test(description = "print out body")
     void test011(){
         Response response = RestAssured.get(taskURL);
         response.getBody().prettyPrint();
@@ -31,7 +35,8 @@ public class aa_GET_01 {
                 .body("data[0].id", equalTo(1));
     }
 
-    @Test(description = "CLASS TASK") //<<=========================
+    //Class task
+    @Test(description = "validate name")
     void test021(){
         given()
                 .get(taskURL)
@@ -56,7 +61,7 @@ public class aa_GET_01 {
                 .log().body();
     }
 
-    @Test(description = "asserting if data.name properties has given names as a parameter")
+    @Test(description = "asserting if data.name properties has given multiple names")
     void test05(){
         given()
                 .get(usersURL)
@@ -66,7 +71,8 @@ public class aa_GET_01 {
         .log().body();
     }
 
-    @Test(description = "CLASS TASK") //<<=========================
+    //Class task
+    @Test(description = "Validate multiple fields")
     void test051(){
         given()
                 .get(taskURL)
@@ -76,7 +82,9 @@ public class aa_GET_01 {
                 .log().body();
     }
 
-    @Test(description = "asserting if data.name properties has given names as a parameter")
+    //NOTE: WORKING WITH HEADERS
+
+    @Test(description = "asserting header's content-type")
     void test06(){
         given()
                 .get(usersURL)
@@ -86,30 +94,69 @@ public class aa_GET_01 {
                 .log().headers();
     }
 
-    @Test(description = "CLASS TASK") //<<=========================
+    //Class task
+    @Test(description = "Check response server is Cowboy")
     void test061(){
         given()
                 .get(taskURL)
                 .then()
                 .statusCode(200)
-                .header("Server", equalTo("Cowboy"))
-                .cookie("connect.sid")
+                .header("Server", "Cowboy")
                 .log().headers();
     }
 
-    @Test(description = "CLASS TASK") //<<=========================
+    @Test(description = "extracting a header")
+    void test0610(){
+        Headers headers = given()
+                .get(taskURL)
+                .getHeaders();
+
+        System.out.println(headers.get("Connection"));
+        System.out.println(headers.get("Date"));
+    }
+
+    //NOTE: WORKING WITH COOKIES
+
+    @Test(description = "Check if cookie contains property connect.sid")
     void test062(){
         given()
                 .get(taskURL)
                 .then()
                 .statusCode(200)
-                .cookies("Domain", equalTo("tla-school-api.herokuapp.com"))
-                .log().cookies();
+                .cookie("connect.sid")
+                .log().headers();
     }
 
-    //PATH Parameters example
+    @Test(description = "Getting Cookie details ")
+    void test063(){
+        Cookie cookie = given()
+                .get("https://jsonplaceholder.typicode.com/users")
+                .then()
+                .statusCode(200)
+                .extract()
+                .detailedCookie("__cfduid");
 
-    @Test
+        System.out.println(cookie.getDomain());
+        System.out.println(cookie.getValue());
+        System.out.println(cookie.getExpiryDate());
+    }
+
+    //Class Task
+    @Test(description = "print out ")
+    void test064(){
+        Headers headers = given().get(taskURL).getHeaders();
+        Cookie cookie = given().get(taskURL).then().extract().detailedCookie("connect.sid");
+
+        System.out.println(headers.get("etag"));
+        System.out.println(headers.get("content-type"));
+
+        System.out.println(cookie.getValue());
+        System.out.println(cookie.isSecured());
+    }
+
+    //NOTE: PATH Parameters example
+
+    @Test(description = "pathParam name should be inserted in .get method in {} braces")
     void test070(){
         given()
                 .pathParam("resource", "users")
@@ -119,7 +166,7 @@ public class aa_GET_01 {
                 .statusCode(200);
     }
 
-    //PATH parameter using DataProvider
+    //NOTE: PATH parameter using DataProvider
 
     String baseURL = "https://gorest.co.in/public-api";
 
@@ -139,7 +186,25 @@ public class aa_GET_01 {
                 .log().headers();
     }
 
-    //QUERY PARAM examples
+    //Class task - resource: https://jsonplaceholder.typicode.com
+    @DataProvider(name = "taskPathParam")
+    public Object[] taskPathParam(){
+        return new String[] {"posts", "comments", "albums", "photos", "todos", "users"};
+    }
+
+    @Test(dataProvider = "taskPathParam")
+    void test072(String resource){
+        given()
+                .pathParam("paramName", resource)
+                .when()
+                .get("https://jsonplaceholder.typicode.com/{paramName}")
+                .then()
+                .statusCode(200)
+                .log().headers();
+    }
+
+
+    //NOTE: QUERY PARAM examples
 
     @Test(description = "inserting page=2 as a query parameter")
     void test080(){
@@ -152,13 +217,14 @@ public class aa_GET_01 {
         .log().body();
     }
 
-    @Test(description = "CLASS TASK -> find course based on query param") // <<========================
+    //Class task
+    @Test(description = "Find course based on query param")
     void test082(){
         given()
                 .queryParam("name", "Java course")
                 .get(taskURL)
                 .then()
-                .body("[0].name", equalTo("Java course"))
+                .body("data[0].name", equalTo("Java course"))
                 .log().body();
     }
 
@@ -172,25 +238,8 @@ public class aa_GET_01 {
                 .log().body();
     }
 
-    //todo
-    @Test(description = "API Key example as a query param")
-    void test090(){
-//        given()
-//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
-    }
 
-    //todo
-    @Test(description = "API Key example as a header param")
-    void test091(){
-//        given()
-//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
-    }
 
-    //todo
-    @Test(description = "Bearer token example, get token using api and then using in request")
-    void test10(){
-//        given()
-//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
-    }
+
 
 }

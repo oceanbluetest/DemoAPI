@@ -9,8 +9,12 @@ import java.io.FileReader;
 
 public class a03_JsonFile {
     public static void main(String[] args) {
+        //NOTE: First demo without creating methods then refactor
+
+        //NOTE: part 1 - getting property
         System.out.println(readPropertyFromJsonFile("firstName", "basicJsonObject.json") + "\n");
 
+        //NOTE: part 2 - getting an array
         JSONArray jsonArray = readArrayFromJsonFile("results", "arrayJsonObject.json");
         for (Object jsonObject: jsonArray){
             JSONObject object = (JSONObject)jsonObject;

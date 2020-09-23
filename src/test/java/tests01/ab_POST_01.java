@@ -70,5 +70,28 @@ public class ab_POST_01 {
                 .log().body();
     }
 
+    //todo
+    @Test(description = "API Key example as a query param, test _id: 5f6a6f48cba63100176f43cc ")
+    void test090(){
+//        given()
+//                .queryParam("key")
+//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
+    }
+
+    //todo
+    @Test(description = "API Key example as a header param")
+    void test091(){
+//        given()
+//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
+    }
+
+    //todo
+    @Test(description = "Bearer token example, get token using api and then using in request")
+    void test10(){
+//        given()
+//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
+
+    }
+
 
 }
