@@ -1,8 +1,14 @@
 package tests01;
 
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Method;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import utils.JsonUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +18,8 @@ import static io.restassured.RestAssured.*;
 public class ab_POST_01 {
     String usersURL = "https://tla-school-api.herokuapp.com/api/school/programs/sdetcourse";
 
+    //NOTE: Creating json objects. Request body also called as a PAYLOAD
+
     @Test(description = "creating a json object using map and inserting in json object")
     void test01() {
         Map<String, String> map = new HashMap<>();
@@ -19,10 +27,6 @@ public class ab_POST_01 {
         map.put("duration", "2 day");
         System.out.println(map);
 
-        /*
-        Need json library to convert map into json format
-        get Gson dependency from google
-         */
         JSONObject jsonObject = new JSONObject(map);
         System.out.println(jsonObject);
     }
@@ -35,15 +39,23 @@ public class ab_POST_01 {
         System.out.println(jsonObject);
     }
 
+    @Test(description = "creating a json object from .json file, need to modify existing re-usable method in a03_JsonFile.class")
+    void test020(){
+        JSONObject object = JsonUtils.readBodyFromJsonFile("src\\test\\resources\\data\\sdetCourse.json");
+        System.out.println(object.toString());
+    }
+
+    //NOTE: SENDING POST REQUESTS
+
     @Test(description = "sending a POST Request, if Serialization related exception appear, get jackson-databind dependency")
     void test03() {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name", "Xpath selectors");
-        jsonObject.put("duration", "2 days");
+        JSONObject requestParameters = new JSONObject();
+        requestParameters.put("name", "Xpath selectors");
+        requestParameters.put("duration", "2 days");
 
         given()
                 .contentType("application/json")
-                .body(jsonObject)
+                .body(requestParameters)
                 .when()
                 .post(usersURL)
                 .then()
@@ -56,13 +68,13 @@ public class ab_POST_01 {
         map.put("name", "Multiple windows");
         map.put("duration", "2 hours");
 
-        JSONObject jsonObject = new JSONObject(map);
+        JSONObject requestParameters = new JSONObject(map);
 
         given()
                 .header("Content-Type", "application/json")
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .body(jsonObject)
+                .body(requestParameters)
                 .when()
                 .post(usersURL)
                 .then()
@@ -70,26 +82,88 @@ public class ab_POST_01 {
                 .log().body();
     }
 
-    //todo
-    @Test(description = "API Key example as a query param, test _id: 5f6a6f48cba63100176f43cc ")
-    void test090(){
-//        given()
-//                .queryParam("key")
-//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
+    @Test(description = "POST request with variables")
+    void test030(){
+        RestAssured.baseURI = "https://tla-school-api.herokuapp.com/api/school/resources";
+        RequestSpecification httpRequest = RestAssured.given();
+
+        JSONObject requestParameters = new JSONObject();
+        requestParameters.put("firstName", "Anderson");
+        requestParameters.put("lastName", "Cooper");
+        requestParameters.put("email", "oliviastone@email.com");
+        requestParameters.put("batch", 2);
+
+        httpRequest.header("Content-Type", "application/json");
+        httpRequest.queryParam("key", "d03e989018msh7f4691c614e87a9p1a8181j");
+        httpRequest.body(requestParameters);
+
+        Response response = httpRequest.request(Method.POST, "/students");
+
+        String responseBody = response.getBody().asString();
+        System.out.println(responseBody);
+
+        int status = response.getStatusCode();
+        System.out.println(status);
+        Assert.assertEquals(status, 200);
     }
 
-    //todo
-    @Test(description = "API Key example as a header param")
+    @Test(description = "API Key example as a query param")
+    void test090(){
+        JSONObject requestParameters = new JSONObject();
+        requestParameters.put("firstName", "James");
+        requestParameters.put("lastName", "Cash");
+        requestParameters.put("email", "oliviastone@email.com");
+        requestParameters.put("batch", 2);
+
+        given()
+                .header("content-type", "application/json")
+                .body(requestParameters)
+                .when()
+                .post("https://tla-school-api.herokuapp.com/api/school/resources/students")
+                .then()
+                .statusCode(200)
+                .log().body();
+    }
+
+    //Class task
+    @Test(description = "create an instructor")
     void test091(){
-//        given()
-//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
+        JSONObject requestParameters = new JSONObject();
+        requestParameters.put("firstName", "James");
+        requestParameters.put("lastName", "Cash");
+        requestParameters.put("email", "jamesCash@email.com");
+        requestParameters.put("batch", 2);
+
+        given()
+                .header("content-type", "application/json")
+                .body(requestParameters)
+                .when()
+                .post("https://tla-school-api.herokuapp.com/api/school/resources/instructors")
+                .then()
+                .statusCode(200)
+                .log().body();
     }
 
     //todo
     @Test(description = "Bearer token example, get token using api and then using in request")
     void test10(){
-//        given()
-//                .get("https://tla-school-api.herokuapp.com/api/school/resources/students")
+        String token = "2e93a51c1044d5e261dd2c08198f9a02d1cb00edb22a875c534e1589ff0f8e73";
+
+        JSONObject requestParameters = new JSONObject();
+        requestParameters.put("name", "Cameron Orange");
+        requestParameters.put("gender", "Female");
+        requestParameters.put("email", "orange@email.com");
+        requestParameters.put("status", "Active");
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .header("content-type", ContentType.JSON)
+                .body(requestParameters)
+                .when()
+                .post("https://gorest.co.in/public-api/users")
+                .then()
+                .statusCode(200)
+                .log().body();
 
     }
 

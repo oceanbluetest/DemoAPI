@@ -3,7 +3,10 @@ package tests01;
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie;
 import io.restassured.http.Headers;
+import io.restassured.http.Method;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -236,6 +239,27 @@ public class aa_GET_01 {
                 .then()
                 .body("data.name", hasItems("Java course", "Java", "Selenium course"))
                 .log().body();
+    }
+
+    //NOTE: Second way of writing Requests
+
+    @Test
+    void test090(){
+        RestAssured.baseURI = "https://tla-school-api.herokuapp.com/api/school/resources";
+        RequestSpecification httpRequest = RestAssured.given();
+        Response response = httpRequest.request(Method.GET, "/students/5f67b0346c91e700178a82be");
+
+        String responseBody = response.getBody().asString();
+        System.out.println(responseBody);
+
+        int status = response.getStatusCode();
+        System.out.println(status);
+
+        Assert.assertEquals(status, 200);
+
+        String statusLine = response.getStatusLine();
+        System.out.println(statusLine);
+        Assert.assertEquals(statusLine, "HTTP/1.1 200 OK");
     }
 
 
