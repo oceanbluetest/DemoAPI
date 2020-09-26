@@ -1,10 +1,5 @@
 package tests01;
 
-import io.restassured.RestAssured;
-import io.restassured.http.Cookie;
-import io.restassured.http.Headers;
-import io.restassured.response.Response;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;

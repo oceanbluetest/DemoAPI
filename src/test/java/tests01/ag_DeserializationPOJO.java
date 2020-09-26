@@ -2,6 +2,7 @@ package tests01;
 
 import org.testng.annotations.Test;
 import tests01.pojo.dummyAPI.Employee;
+import tests01.pojo.dummyAPI.Employee2;
 import tests01.pojo.gorest.User;
 import tests01.pojo.jsonplaceholder.Comments;
 import tests01.pojo.jsonplaceholder.Post;
@@ -10,7 +11,7 @@ import tests01.pojo.sdetCourse.Sdetcourse;
 import static io.restassured.RestAssured.*;
 
 public class ag_DeserializationPOJO {
-    //BASIC ----------------------
+    //NOTE: BASIC ----------------------
     @Test(description = "Basic deserialization, using one POJO")
     void test01(){
         Post post = given().get("https://jsonplaceholder.typicode.com/posts/1").as(Post.class);
@@ -32,7 +33,7 @@ public class ag_DeserializationPOJO {
         System.out.println(comments.getBody());
     }
 
-    //BASIC-COMPLEX ------------------------
+    //NOTE: BASIC-COMPLEX ------------------------
 
     @Test(description = "Basic-Complex - Deserialization, Need to create 2 POJOS: Employee.class and EmployeeData.class")
     void test02(){
@@ -46,11 +47,12 @@ public class ag_DeserializationPOJO {
         System.out.println(user.toString());
     }
 
-    //MORE-COMPLEX ----------------------
+    //NOTE: MORE-COMPLEX ----------------------
     @Test(description = "more-complex deserialization, Need to create 2 POJOS: Sdetcourse.class and Course.class")
     void test03(){
         Sdetcourse sdetcourse = given()
                 .queryParam("name", "Selenium course")
+                .queryParam("name", "Java course")
                 .get("https://tla-school-api.herokuapp.com/api/school/programs/sdetcourse")
                 .as(Sdetcourse.class);
 
@@ -59,6 +61,8 @@ public class ag_DeserializationPOJO {
         System.out.println(sdetcourse.getData().get(0).getId());
         System.out.println(sdetcourse.getData().get(0).getName());
         System.out.println(sdetcourse.getData().get(0).get__v());
+
+        System.out.println(sdetcourse.getData().get(1).getName());
     }
 
 }

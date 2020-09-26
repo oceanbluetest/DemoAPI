@@ -144,8 +144,7 @@ public class ab_POST_01 {
                 .log().body();
     }
 
-    //todo
-    @Test(description = "Bearer token example, get token using api and then using in request")
+    @Test(description = "Bearer token example, get token using api in postman and then use in request")
     void test10(){
         String token = "2e93a51c1044d5e261dd2c08198f9a02d1cb00edb22a875c534e1589ff0f8e73";
 
@@ -166,6 +165,7 @@ public class ab_POST_01 {
                 .log().body();
 
     }
+
 
 
 }

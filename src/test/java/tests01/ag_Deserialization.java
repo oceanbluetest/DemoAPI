@@ -1,5 +1,7 @@
 package tests01;
 
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -74,6 +76,14 @@ public class ag_Deserialization {
         System.out.println(companyName);
     }
 
+    @Test(description = "using JSON Path")
+    void test020(){
+        Response response = given()
+                .get("https://jsonplaceholder.typicode.com/users/1");
+        JsonPath jsonPath = response.jsonPath();
+        System.out.println(jsonPath.get("company.name").toString());
+    }
+
     @Test(description = "get one property from list of properties")
     void test021(){
         String companyName = given()
@@ -98,6 +108,7 @@ public class ag_Deserialization {
                 .get("https://jsonplaceholder.typicode.com/users/1")
                 .jsonPath()
                 .getMap("address");
+        System.out.println(address);
         System.out.println(address.get("suite"));
     }
 
