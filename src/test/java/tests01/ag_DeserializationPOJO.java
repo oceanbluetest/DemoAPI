@@ -67,10 +67,11 @@ public class ag_DeserializationPOJO {
         System.out.println(sdetcourse.getData().get(1).getName());
     }
 
-    //NOTE: Using Gson
+    //NOTE: Using Gson serialize and deserialize
 
     @Test
     void test04(){
+        //Deserialize
         String userData = "{\n" +
                 "    \"code\": 200,\n" +
                 "    \"meta\": null,\n" +
@@ -90,6 +91,11 @@ public class ag_DeserializationPOJO {
         System.out.println(user.toString());
 
         System.out.println(user.getData().getName());
+
+        //Serialize
+        String post = gson.toJson(user);
+        System.out.println();
+        System.out.println(post);
     }
 
 }
