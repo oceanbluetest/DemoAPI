@@ -1,5 +1,7 @@
 package tests01;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.testng.annotations.Test;
 import tests01.pojo.dummyAPI.Employee;
 import tests01.pojo.dummyAPI.Employee2;
@@ -63,6 +65,31 @@ public class ag_DeserializationPOJO {
         System.out.println(sdetcourse.getData().get(0).get__v());
 
         System.out.println(sdetcourse.getData().get(1).getName());
+    }
+
+    //NOTE: Using Gson
+
+    @Test
+    void test04(){
+        String userData = "{\n" +
+                "    \"code\": 200,\n" +
+                "    \"meta\": null,\n" +
+                "    \"data\": {\n" +
+                "        \"id\": 8,\n" +
+                "        \"name\": \"Shankar Acharya Esq.\",\n" +
+                "        \"email\": \"shankar_acharya_esq@runolfsson.io\",\n" +
+                "        \"gender\": \"Male\",\n" +
+                "        \"status\": \"Active\",\n" +
+                "        \"created_at\": \"2020-09-26T03:50:03.907+05:30\",\n" +
+                "        \"updated_at\": \"2020-09-26T03:50:03.907+05:30\"\n" +
+                "    }\n" +
+                "}";
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        User user = gson.fromJson(userData, User.class);
+        System.out.println(user.toString());
+
+        System.out.println(user.getData().getName());
     }
 
 }
