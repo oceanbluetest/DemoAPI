@@ -11,7 +11,7 @@ import org.testng.annotations.DataProvider;
                 "json:target/cucumber.json",
                 "rerun:target/re-run.txt"
         },
-        tags = "@tag2"
+        tags = "@sdetcourse"
         ,dryRun = false
 )
 public class RunnerTest extends AbstractTestNGCucumberTests {

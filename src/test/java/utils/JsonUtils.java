@@ -45,4 +45,17 @@ public class JsonUtils {
         }
         return jsonObject;
     }
+
+    public static String readStringBodyFromJsonFile(String fileName){
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = null;
+        try{
+            Object object = parser.parse(new FileReader(fileName));
+            jsonObject = (JSONObject)object;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
 }
