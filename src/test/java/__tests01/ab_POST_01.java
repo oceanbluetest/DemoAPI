@@ -166,6 +166,35 @@ public class ab_POST_01 {
 
     }
 
+    @Test
+    void test11(){
+        String a = "{\n" +
+                "    \"firstName\": \"Blue\",\n" +
+                "    \"lastName\": \"Ocean\",\n" +
+                "    \"phoneNumber\": \"555-555-5555\",\n" +
+                "    \"email\": \"student@techleadacademy.io\",\n" +
+                "    \"role\": \"Student\",\n" +
+                "    \"password\": \"john.smith$\"\n" +
+                "}";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("firstName", "TestFirst");
+        map.put("lastName", "TestLast");
+        map.put("phoneNumber", "123");
+        map.put("email", "TestEmail");
+        map.put("role", "Student");
+        map.put("password", "password");
+        JSONObject jsonObject = new JSONObject(map);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(jsonObject)
+                .when()
+                .post("http://automation.techleadacademy.io/api/members")
+                .then()
+                .log().body();
+    }
+
 
 
 }
